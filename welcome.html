@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px; /* Adds space between search input and the result box */
+        }
+
+        #searchId {
+            padding: 10px;
+            width: 200px;
+        }
+
+        #searchBtn {
+            background-color: #1e88e5;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-left: 50px;
+        }
+
+        .form-container {
+            background-color: #4fc3f7;
+            padding: 20px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            color: white;
+        }
+
+        input {
+            padding: 10px;
+            border: none;
+        }
+
+        #addEmployeeBtn {
+            background-color: #0288d1;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-container .card {
+            /* Aligns the result card to the right of the search */
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 id="head1" class="text-primary" id="welcome-message">Welcome</h1>
+    <button class="btn btn-danger logout-btn" onclick="logout()">Logout</button>
+
+    <div class="container">
+        <h2>Employee Details</h2>
+        <div class="search-container">
+            <div>
+                <input type="text" id="searchId" placeholder="Search Id">
+                <button id="searchBtn" onclick="search()">Search</button>
+            </div>
+            <div id="result"></div>
+        </div>
+        
+        <div class="form-container">
+            <input type="text" id="empId" placeholder="Employee ID">
+            <input type="text" id="empName" placeholder="Employee Name">
+            <input type="text" id="empAddress" placeholder="Employee Address">
+            <input type="text" id="empDesignation" placeholder="Employee Designation">
+            <input type="text" id="empExperience" placeholder="Employee Experience">
+            <input type="text" id="empSalary" placeholder="Employee Salary">
+            <button id="addEmployeeBtn" onclick="Addemp()">Add Employee</button>
+        </div>
+    </div>
+
+    <script>
+        let username = localStorage.getItem("USERNAME");
+        console.log(username);
+        head1.innerHTML = `Welcome ${username}`
+
+        function Addemp() {
+            const employee = {
+                id: empId.value,
+                name: empName.value,
+                address: empAddress.value,
+                designation: empDesignation.value,
+                experience: empExperience.value,
+                salary: empSalary.value
+            }
+            if (employee.id == "" || employee.name == "" || employee.address == "" || employee.designation == "" || employee.experience == "" || employee.salary == "") {
+                alert("Please fill the form");
+            } else {
+                if (employee.id in localStorage) {
+                    alert("Employee already exists");
+                } else {
+                    localStorage.setItem(employee.id, JSON.stringify(employee));
+                    alert("Employee added successfully");
+                }
+            }
+        }
+
+        function search() {
+            let Search_key = searchId.value;
+            console.log(Search_key);
+            if (Search_key in localStorage) {
+                let emp = JSON.parse(localStorage.getItem(Search_key));
+                console.log(emp);
+                let htmlData = `<div class="card" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">ID: ${emp.id}</li>
+                      <li class="list-group-item">Name: ${emp.name}</li>
+                      <li class="list-group-item">Address: ${emp.address}</li>
+                      <li class="list-group-item">Designation: ${emp.designation}</li>
+                      <li class="list-group-item">Experience: ${emp.experience}</li>
+                      <li class="list-group-item">Salary: ${emp.salary}</li>
+                    </ul>
+                  </div>`;
+                result.innerHTML = htmlData;
+            } else {
+                alert("Employee not found");
+            }
+        }
+    </script>
+
+</body>
+</html>
